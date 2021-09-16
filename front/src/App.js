@@ -92,7 +92,6 @@ const List = () => {
 
 
   const onDelete = (id) => {
-    console.log(id);
     fetch(HOST_API + "/" + id + "/todoList", {
       method: "DELETE"
     }).then((list) => {
@@ -176,8 +175,10 @@ function reducer(state, action) {
     case 'delete-item':
       const todoUpDelete = state.todo;
       const listUpdate = todoUpDelete.list.filter((item) => {
-        return item.id !== action.id;
+        console.log(item);
+        return item.id_todolist !== action.id;
       });
+      
       todoUpDelete.list = listUpdate;
       return { ...state, todo: todoUpDelete }
     case 'update-list':

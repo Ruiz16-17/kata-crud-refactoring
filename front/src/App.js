@@ -37,6 +37,30 @@ const Form = () => {
       });
   }
 
+  const onAddTodo = (event) => {
+    event.preventDefault();
+
+    const request = {
+      name_todolist: state.name_todolist,
+      id: null,
+    };
+
+
+    fetch(HOST_API + "/todoList", {
+      method: "POST",
+      body: JSON.stringify(request),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then((todo) => {
+        dispatch({ type: "add-item", item: todo });
+        setState({ name_todolist: "" });
+        formRef.current.reset();
+      });
+  }
+
   const onEdit = (event) => {
     event.preventDefault();
 
@@ -126,34 +150,35 @@ const List = () => {
     textDecoration: 'line-through'
   };
   return <div>
-    <table border="1">
-      <thead>
-        <tr>
-          <td>ID</td>
-          <td>Categoría</td>
-          <td>Nombre</td>
-        </tr>
-      </thead>
-      <tbody>
+      <ol>
         {currentList.map((todoList) => {
           const todo = todoList.todo;
           
-          return <tr key={todoList.id} style={todoList.completed ? decorationDone : {}}>
-            <td>{todoList.id_todolist}</td>
-            <td>{todoList.name_todolist}<button onClick={() => onDelete(todoList.id_todolist)}>Eliminar</button></td>
+          return <ol key={todoList.id_todolist} style={todoList.completed ? decorationDone : {}}>
+            {todoList.name_todolist}<button onClick={() => onDelete(todoList.id_todolist)}>Eliminar</button>
             {/* {todo.map((item) => {
 
-              return <td>{item.name_todo}</td>
-
-            })} */}
-
+              return <>
+              <li key={item.id_todo}>{item.name_todo}</li>
+              <li key={item.id_todo}>{item.isCompleted}</li>
+              <table>
+              <tbody>
+              <tr>
+                <td></td>
+              </tr>
+              </tbody>
+              </table>
+              </>
+              
+            })}  */}
+            <br/>
             {/* <td><input type="checkbox" defaultChecked={todo.completed} onChange={(event) => onChange(event, todo)}></input></td>
             <td><button onClick={() => onDelete(todo.id)}>Eliminar</button></td>
             <td><button onClick={() => onEdit(todo)}>Editar</button></td> */}
-          </tr>
+          </ol>
+          
         })}
-      </tbody>
-    </table>
+      </ol>
   </div>
 }
 
@@ -172,10 +197,10 @@ function reducer(state, action) {
       todoUpItem.list = listUpdateEdit;
       todoUpItem.item = {};
       return { ...state, todo: todoUpItem }
+    
     case 'delete-item':
       const todoUpDelete = state.todo;
       const listUpdate = todoUpDelete.list.filter((item) => {
-        console.log(item);
         return item.id_todolist !== action.id;
       });
       

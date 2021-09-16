@@ -17,39 +17,18 @@ public class Todo {
     @Column(name = "isCompleted_todo")
     private boolean isCompleted_todo;
 
-    //@Column(name = "name_todo")
-    //private String groupListId;
-
-   // @ManyToOne(optional = false)
-    //@JoinColumn(name = "todolist_id")
-      //  private TodoList todolist_id;
-
-    //public String getGroupListId() {
-      //  return groupListId;
-    //}
-
-    //public void setGroupListId(String groupListId) {
-      //  this.groupListId = groupListId;
-    //}
+    @Column(name = "todolist_id")
+    private Long todolist_id;
 
     public Todo() {
     }
 
-
-    public Todo(Long id_todo, String name_todo, boolean isCompleted_todo, TodoList todolistId) {
+    public Todo(Long id_todo, String name_todo, boolean isCompleted_todo, Long todolist_id) {
         this.id_todo = id_todo;
         this.name_todo = name_todo;
         this.isCompleted_todo = isCompleted_todo;
-        //this.todolist_id = todolistId;
+        this.todolist_id = todolist_id;
     }
-
-    //public TodoList getTodolistId() {
-      //  return todolist_id;
-    //}
-
-    //public void setTodolistId(TodoList todolistId) {
-      //  this.todolist_id = todolistId;
-    //}
 
     public Long getId_todo() {
         return id_todo;
@@ -75,5 +54,11 @@ public class Todo {
         isCompleted_todo = completed_todo;
     }
 
+    public Long getTodolist_id() {
+        return todolist_id;
+    }
 
+    public void setTodolist_id(Long todolist_id) {
+        this.todolist_id = todolist_id;
+    }
 }

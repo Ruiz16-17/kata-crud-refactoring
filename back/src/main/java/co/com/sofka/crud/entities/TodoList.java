@@ -18,17 +18,12 @@ public class TodoList {
     private String name_todolist;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-            name = "todolist_todo",
-            joinColumns = @JoinColumn(name = "todolist_id"),
-            inverseJoinColumns = @JoinColumn(name = "id_todo")
-    )
-    private List<Todo> todo = new ArrayList<Todo>();
+    private Set<Todo> todo;
 
     public TodoList() {
     }
 
-    public TodoList(Long id_todolist, String name_todolist, List<Todo> todo) {
+    public TodoList(Long id_todolist, String name_todolist, Set<Todo> todo) {
         this.id_todolist = id_todolist;
         this.name_todolist = name_todolist;
         this.todo = todo;
@@ -50,11 +45,11 @@ public class TodoList {
         this.name_todolist = name_todolist;
     }
 
-    public List<Todo> getTodo() {
+    public Set<Todo> getTodo() {
         return todo;
     }
 
-    public void setTodo(List<Todo> todo) {
+    public void setTodo(Set<Todo> todo) {
         this.todo = todo;
     }
 }

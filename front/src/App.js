@@ -157,7 +157,6 @@ const List = () => {
           return <ol key={todoList.id_todolist} style={todoList.completed ? decorationDone : {}}>
             {todoList.name_todolist}<button onClick={() => onDelete(todoList.id_todolist)}>Eliminar</button>
             {/* {todo.map((item) => {
-
               return <>
               <li key={item.id_todo}>{item.name_todo}</li>
               <li key={item.id_todo}>{item.isCompleted}</li>

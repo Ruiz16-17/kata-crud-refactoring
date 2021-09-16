@@ -1,5 +1,8 @@
 package co.com.sofka.crud.entities;
 
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "todolist")
+@EnableJpaRepositories
+@EnableJpaAuditing
 public class TodoList {
 
     @Id

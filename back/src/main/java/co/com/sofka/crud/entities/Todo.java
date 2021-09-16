@@ -1,9 +1,14 @@
 package co.com.sofka.crud.entities;
 
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "todo")
+@EnableJpaRepositories
+@EnableJpaAuditing
 public class Todo {
 
     @Id

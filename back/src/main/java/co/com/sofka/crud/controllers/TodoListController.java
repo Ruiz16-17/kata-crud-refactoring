@@ -5,6 +5,8 @@ import co.com.sofka.crud.entities.TodoList;
 import co.com.sofka.crud.services.TodoListService;
 import co.com.sofka.crud.services.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,29 +14,56 @@ import org.springframework.web.bind.annotation.*;
 public class TodoListController {
 
     @Autowired
-    private TodoListService service;
+    private TodoListService todoListService;
 
     @GetMapping(value = "api/todosLists")
-    public Iterable<TodoList> list(){
-        return service.list();
+    public ResponseEntity<?> getAll(){
+        try{
+
+            return ResponseEntity.status(HttpStatus.OK).body(todoListService.findAll());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
+        }
+    }
+
+    @GetMapping("api/{id}/todoList")
+    public ResponseEntity<?> getOne(@PathVariable Long id){
+        try {
+
+            return ResponseEntity.status(HttpStatus.OK).body(todoListService.findById(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
+        }
     }
 
     @PostMapping(value = "api/todoList")
-    public TodoList save(@RequestBody TodoList todoList){
-        return service.save(todoList);
+    public ResponseEntity<?> save(@RequestBody TodoList entity){
+        try {
+
+            return ResponseEntity.status(HttpStatus.OK).body(todoListService.save(entity));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
+        }
     }
 
-    @PutMapping(value = "api/todoList")
-    public TodoList update(@RequestBody TodoList todoList){
-        if(todoList.getId_todolist() != null){
-            return service.save(todoList);
+    @PutMapping(value = "api/{id}/todoList")
+    public ResponseEntity<?> update(@PathVariable Long id,@RequestBody TodoList entity){
+        try {
+
+            return ResponseEntity.status(HttpStatus.OK).body(todoListService.update(id,entity));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
         }
-        throw new RuntimeException("No existe el id para actualziar");
     }
 
     @DeleteMapping(value = "api/{id}/todoList")
-    public void delete(@PathVariable("id")Long id){
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable("id")Long id){
+        try {
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(todoListService.delete(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
+        }
     }
 
 }

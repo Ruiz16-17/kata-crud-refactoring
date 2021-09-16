@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useEffect, useRef, useState, createContext } from 'react';
+import React, { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
 
 const HOST_API = "http://localhost:8080/api";
 const initialState = {
@@ -17,13 +17,12 @@ const Form = () => {
     event.preventDefault();
 
     const request = {
-      name: state.name,
+      name_todolist: state.name_todolist,
       id: null,
-      completed: false
     };
 
 
-    fetch(HOST_API + "/todo", {
+    fetch(HOST_API + "/todoList", {
       method: "POST",
       body: JSON.stringify(request),
       headers: {
@@ -33,7 +32,7 @@ const Form = () => {
       .then(response => response.json())
       .then((todo) => {
         dispatch({ type: "add-item", item: todo });
-        setState({ name: "" });
+        setState({ name_todolist: "" });
         formRef.current.reset();
       });
   }
@@ -48,7 +47,7 @@ const Form = () => {
     };
 
 
-    fetch(HOST_API + "/todo", {
+    fetch(HOST_API + "/todoList", {
       method: "PUT",
       body: JSON.stringify(request),
       headers: {
@@ -58,7 +57,7 @@ const Form = () => {
       .then(response => response.json())
       .then((todo) => {
         dispatch({ type: "update-item", item: todo });
-        setState({ name: "" });
+        setState({ name_todolist: "" });
         formRef.current.reset();
       });
   }
@@ -66,11 +65,11 @@ const Form = () => {
   return <form ref={formRef}>
     <input
       type="text"
-      name="name"
+      name_todolist="name_todolist"
       placeholder="¿Qué piensas hacer hoy?"
-      defaultValue={item.name}
+      defaultValue={item.name_todolist}
       onChange={(event) => {
-        setState({ ...state, name: event.target.value })
+        setState({ ...state, name_todolist: event.target.value })
       }}  ></input>
     {item.id && <button onClick={onEdit}>Actualizar</button>}
     {!item.id && <button onClick={onAdd}>Crear</button>}
@@ -83,16 +82,18 @@ const List = () => {
   const currentList = todo.list;
 
   useEffect(() => {
-    fetch(HOST_API + "/todos")
+    fetch(HOST_API + "/todosLists")
       .then(response => response.json())
       .then((list) => {
         dispatch({ type: "update-list", list })
       })
+
   }, [dispatch]);
 
 
   const onDelete = (id) => {
-    fetch(HOST_API + "/" + id + "/todo", {
+    console.log(id);
+    fetch(HOST_API + "/" + id + "/todoList", {
       method: "DELETE"
     }).then((list) => {
       dispatch({ type: "delete-item", id })
@@ -105,11 +106,11 @@ const List = () => {
 
   const onChange = (event, todo) => {
     const request = {
-      name: todo.name,
+      name: todo.name_todolist,
       id: todo.id,
       completed: event.target.checked
     };
-    fetch(HOST_API + "/todo", {
+    fetch(HOST_API + "/todoList", {
       method: "PUT",
       body: JSON.stringify(request),
       headers: {
@@ -126,22 +127,30 @@ const List = () => {
     textDecoration: 'line-through'
   };
   return <div>
-    <table >
+    <table border="1">
       <thead>
         <tr>
           <td>ID</td>
-          <td>Tarea</td>
-          <td>¿Completado?</td>
+          <td>Categoría</td>
+          <td>Nombre</td>
         </tr>
       </thead>
       <tbody>
-        {currentList.map((todo) => {
-          return <tr key={todo.id} style={todo.completed ? decorationDone : {}}>
-            <td>{todo.id}</td>
-            <td>{todo.name}</td>
-            <td><input type="checkbox" defaultChecked={todo.completed} onChange={(event) => onChange(event, todo)}></input></td>
+        {currentList.map((todoList) => {
+          const todo = todoList.todo;
+          
+          return <tr key={todoList.id} style={todoList.completed ? decorationDone : {}}>
+            <td>{todoList.id_todolist}</td>
+            <td>{todoList.name_todolist}<button onClick={() => onDelete(todoList.id_todolist)}>Eliminar</button></td>
+            {/* {todo.map((item) => {
+
+              return <td>{item.name_todo}</td>
+
+            })} */}
+
+            {/* <td><input type="checkbox" defaultChecked={todo.completed} onChange={(event) => onChange(event, todo)}></input></td>
             <td><button onClick={() => onDelete(todo.id)}>Eliminar</button></td>
-            <td><button onClick={() => onEdit(todo)}>Editar</button></td>
+            <td><button onClick={() => onEdit(todo)}>Editar</button></td> */}
           </tr>
         })}
       </tbody>
@@ -182,7 +191,7 @@ function reducer(state, action) {
     case 'add-item':
       const todoUp = state.todo.list;
       todoUp.push(action.item);
-      return { ...state, todo: {list: todoUp, item: {}} }
+      return { ...state, todo: { list: todoUp, item: {} } }
     default:
       return state;
   }

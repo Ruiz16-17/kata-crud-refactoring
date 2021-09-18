@@ -36,7 +36,7 @@ public class TodoController {
         }
     }
 
-    @PutMapping(value = "api/todo")
+    @PutMapping(value = "api/{id}/todo")
     public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Todo entity){
         try {
 

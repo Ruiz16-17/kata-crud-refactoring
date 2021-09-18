@@ -1,9 +1,7 @@
 package co.com.sofka.crud.controllers;
 
-import co.com.sofka.crud.entities.Todo;
 import co.com.sofka.crud.entities.TodoList;
 import co.com.sofka.crud.services.TodoListService;
-import co.com.sofka.crud.services.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +24,6 @@ public class TodoListController {
         }
     }
 
-    @GetMapping("api/{id}/todoList")
-    public ResponseEntity<?> getOne(@PathVariable Long id){
-        try {
-
-            return ResponseEntity.status(HttpStatus.OK).body(todoListService.findById(id));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
-        }
-    }
-
     @PostMapping(value = "api/todoList")
     public ResponseEntity<?> save(@RequestBody TodoList entity){
         try {
@@ -43,16 +31,6 @@ public class TodoListController {
             return ResponseEntity.status(HttpStatus.OK).body(todoListService.save(entity));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
-        }
-    }
-
-    @PutMapping(value = "api/{id}/todoList")
-    public ResponseEntity<?> update(@PathVariable Long id,@RequestBody TodoList entity){
-        try {
-
-            return ResponseEntity.status(HttpStatus.OK).body(todoListService.update(id,entity));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
         }
     }
 

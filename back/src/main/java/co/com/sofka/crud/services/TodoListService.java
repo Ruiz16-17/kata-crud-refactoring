@@ -1,18 +1,15 @@
 package co.com.sofka.crud.services;
 
-import co.com.sofka.crud.entities.Todo;
 import co.com.sofka.crud.entities.TodoList;
 import co.com.sofka.crud.repositories.TodoListRepository;
-import co.com.sofka.crud.repositories.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class TodoListService implements InterfazBaseService<TodoList>{
+public class TodoListService implements InterfazTodoListService<TodoList>{
 
     @Autowired
     private TodoListRepository todoListRepository;
@@ -32,19 +29,6 @@ public class TodoListService implements InterfazBaseService<TodoList>{
 
     @Override
     @Transactional
-    public TodoList findById(Long id) throws Exception {
-        try{
-
-            Optional<TodoList> entityOptional = todoListRepository.findById(id);
-            return entityOptional.get();
-        }catch (Exception e){
-
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    @Override
-    @Transactional
     public TodoList save(TodoList entity) throws Exception {
         try{
             entity = todoListRepository.save(entity);
@@ -55,19 +39,6 @@ public class TodoListService implements InterfazBaseService<TodoList>{
         }
     }
 
-    @Override
-    @Transactional
-    public TodoList update(Long id, TodoList entity) throws Exception {
-        try{
-            Optional<TodoList> entityOptional = todoListRepository.findById(id);
-            TodoList todoList = entityOptional.get();
-            todoList = todoListRepository.save(entity);
-            return todoList;
-        }catch (Exception e){
-
-            throw new Exception(e.getMessage());
-        }
-    }
 
     @Override
     @Transactional

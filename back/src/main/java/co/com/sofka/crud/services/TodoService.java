@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class TodoService implements InterfazBaseService<Todo>{
+public class TodoService implements InterfazTodoService<Todo>{
 
     @Autowired
     private TodoRepository todoRepository;
@@ -19,10 +22,11 @@ public class TodoService implements InterfazBaseService<Todo>{
 
     @Override
     @Transactional
-    public List<Todo> findAll() throws Exception {
+    public List<Todo> findAll(Long idList) throws Exception {
         try{
-
+            
             List<Todo> entities = todoRepository.findAll();
+            entities = findAllByIdList(entities,idList);
             return entities;
         }catch (Exception e){
 
@@ -30,6 +34,24 @@ public class TodoService implements InterfazBaseService<Todo>{
         }
     }
 
+    public List<Todo> findAllByIdList(List<Todo> todos, Long idList) throws Exception {
+        try{
+
+            List<Todo> entities = new ArrayList<Todo>();
+
+            for (Todo item : todos) {
+                if (item.getTodolist_id()==idList){
+                    entities.add(item);
+                }
+            }
+
+            return entities;
+        }catch (Exception e){
+
+            throw new Exception(e.getMessage());
+        }
+    }
+    
     @Override
     @Transactional
     public Todo findById(Long id) throws Exception {

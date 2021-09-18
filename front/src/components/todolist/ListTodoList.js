@@ -1,4 +1,7 @@
 import React, { useContext, useEffect } from 'react';
+import { StoreProvider } from '../../store';
+import FormTodo from '../todo/FormTodo';
+import ListTodo from '../todo/ListTodo';
 import consumer from './consumer';
 import Store from './storeListTodo';
 
@@ -23,22 +26,27 @@ export default () => {
     };
 
     return <div>
-        <table >
-            <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>Categoría</td>
-                </tr>
-            </thead>
-            <tbody>
-                {currentList.map((todoList) => {
-                    return <tr key={todoList.id_todolist}>
-                        <td>{todoList.id_todolist}</td>
-                        <td>{todoList.name_todolist}</td>
-                        <td><button onClick={() => onDelete(todoList.id_todolist)}>Eliminar</button></td>
-                    </tr>
-                })}
-            </tbody>
-        </table>
+
+        {currentList.map((todoList) => {
+            return <div key={todoList.id_todolist}>
+
+                <fieldset>
+
+                    <legend>
+                        {todoList.name_todolist}
+                        <button onClick={() => onDelete(todoList.id_todolist)}>Eliminar</button>
+
+                        <StoreProvider>
+
+                            <FormTodo />
+                            <ListTodo idList={todoList.id_todolist} />
+                        </StoreProvider>
+
+                    </legend>
+
+                </fieldset>
+
+            </div>
+        })}
     </div>
 }

@@ -2,13 +2,13 @@ package co.com.sofka.crud.services;
 
 import co.com.sofka.crud.entities.Todo;
 
-public interface InterfazTodoService {
+import java.util.List;
 
-    public Iterable<Todo> list();
+public interface InterfazTodoService<E> {
 
-    public Todo save(Todo todo);
-
-    public void delete(Long id);
-
-    public Todo get(Long id);
+    public List<E> findAll(Long idList) throws  Exception;
+    public E findById(Long id) throws Exception;
+    public E save(E entity) throws Exception;
+    public E update(Long id, E entity) throws Exception;
+    public boolean delete(Long id) throws Exception;
 }

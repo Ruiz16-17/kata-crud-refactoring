@@ -15,11 +15,11 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
-    @GetMapping(value = "api/todos")
-    public ResponseEntity<?> getAll(){
+    @GetMapping(value = "api/{idList}/todos")
+    public ResponseEntity<?> getAll(@PathVariable Long idList){
         try{
 
-            return ResponseEntity.status(HttpStatus.OK).body(todoService.findAll());
+            return ResponseEntity.status(HttpStatus.OK).body(todoService.findAll(idList));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente de nuevo.\"}");
         }

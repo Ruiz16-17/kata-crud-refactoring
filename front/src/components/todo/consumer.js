@@ -2,9 +2,9 @@ const HOST_API = "http://localhost:8080/api";
 
 export default {
 
-    List: async () => {
-
-        return fetch(HOST_API + "/todos");
+    List : async (idList) => {
+        
+        return fetch(HOST_API + "/" + idList + "/todos");
     },
 
     save: async (request) => {

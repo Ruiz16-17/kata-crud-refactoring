@@ -2,19 +2,19 @@ import React, { useContext, useEffect } from "react";
 import Store from "../../store";
 import consumer from "./consumer";
 
-export default () => {
+export default ({idList}) => {
 
     const { dispatch, state: { todo } } = useContext(Store);
     const currentList = todo.list;
 
     useEffect(() => {
-        consumer.List().then((response) => {
+        consumer.List(idList).then((response) => {
             response.json().then((list) => {
                 dispatch({ type: "update-list", list });
 
             });
         })
-    }, [dispatch]);
+    }, [dispatch, idList]);
 
 
     const onDelete = (id_todo) => {

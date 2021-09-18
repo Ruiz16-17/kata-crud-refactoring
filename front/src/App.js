@@ -1,12 +1,8 @@
   
-import React, { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import Store, { StoreProvider } from './store';
 
 const HOST_API = "http://localhost:8080/api";
-const initialState = {
-  todo: { list: [], item: {} }
-};
-const Store = createContext(initialState)
-
 
 const Form = () => {
   const formRef = useRef(null);
@@ -148,53 +144,134 @@ const List = () => {
   </div>
 }
 
+//----------------------------------------------------------------TodoList
+
+// const FormTodoList = () => {
+//   const formRef = useRef(null);
+//   const { dispatch, state: { todoList } } = useContext(Store);
+//   const item = todoList.item;
+//   const [state, setState] = useState(item);
+
+//   const onAddTodoList = (event) => {
+//     event.preventDefault();
+
+//     const request = {
+//       name_todolist: state.name_todolist,
+//       id_todolist: null,
+//     };
 
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'update-item':
-      const todoUpItem = state.todo;
-      const listUpdateEdit = todoUpItem.list.map((item) => {
-        if (item.id_todo === action.item.id_todo) {
-          return action.item;
-        }
-        return item;
-      });
-      todoUpItem.list = listUpdateEdit;
-      todoUpItem.item = {};
-      return { ...state, todo: todoUpItem }
-    case 'delete-item':
-      const todoUpDelete = state.todo;
-      const listUpdate = todoUpDelete.list.filter((item) => {
-        return item.id_todo !== action.id_todo;
-      });
-      todoUpDelete.list = listUpdate;
-      return { ...state, todo: todoUpDelete }
-    case 'update-list':
-      const todoUpList = state.todo;
-      todoUpList.list = action.list;
-      return { ...state, todo: todoUpList }
-    case 'edit-item':
-      const todoUpEdit = state.todo;
-      todoUpEdit.item = action.item;
-      return { ...state, todo: todoUpEdit }
-    case 'add-item':
-      const todoUp = state.todo.list;
-      todoUp.push(action.item);
-      return { ...state, todo: {list: todoUp, item: {}} }
-    default:
-      return state;
-  }
-}
+//     fetch(HOST_API + "/todoList", {
+//       method: "POST",
+//       body: JSON.stringify(request),
+//       headers: {
+//         'Content-Type': 'application/json'
+//       }
+//     })
+//       .then(response => response.json())
+//       .then((todoList) => {
+//         dispatch({ type: "add-item", item: todoList });
+//         setState({ name_todolist: "" });
+//         formRef.current.reset();
+//       });
+//   }
 
-const StoreProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
 
-  return <Store.Provider value={{ state, dispatch }}>
-    {children}
-  </Store.Provider>
+//   return <form ref={formRef}>
+//     <input
+//       type="text"
+//       name="name_todolist"
+//       placeholder="¿Qué piensas hacer hoy TodoList?"
+//       defaultValue={item.name_todolist}
+//       onChange={(event) => {
+//         setState({ ...state, name_todolist: event.target.value })
+//       }}  ></input>
+//     <button onClick={onAddTodoList}>Crear</button>
+//   </form>
+// }
 
-}
+
+// const ListTodoList = () => {
+//   const { dispatch, state: { todoList } } = useContext(Store);
+//   const currentList = todoList.list;
+//   useEffect(() => {
+//     fetch(HOST_API + "/todosLists")
+//       .then(response => response.json())
+//       .then((list) => {
+//         dispatch({ type: "update-list", list })
+//       })
+//   }, [dispatch]);
+
+
+//   const onDelete = (id_todolist) => {
+//     fetch(HOST_API + "/" + id_todolist + "/todo", {
+//       method: "DELETE"
+//     }).then((list) => {
+//       dispatch({ type: "delete-item", id_todolist })
+//     })
+//   };
+
+//   return <div>
+//     <table >
+//       <thead>
+//         <tr>
+//           <td>ID</td>
+//           <td>Lista</td>
+//         </tr>
+//       </thead>
+//       <tbody>
+//         {currentList.map((todoList) => {
+//           return <tr key={todoList.id_todo}>
+//             <td>{todoList.id_todolist}</td>
+//             <td>{todoList.name_todolist}</td>
+//             <td><button onClick={() => onDelete(todoList.id_todo)}>Eliminar</button></td>
+//           </tr>
+//         })}
+//       </tbody>
+//     </table>
+//   </div>
+// }
+
+// function reducerTodoList(state, action) {
+//   switch (action.type) {
+//     case 'update-item':
+//       const todoUpItem = state.todoList;
+//       const listUpdateEdit = todoUpItem.list.map((item) => {
+//         if (item.id_todolist === action.item.id_todolist) {
+//           return action.item;
+//         }
+//         return item;
+//       });
+//       todoUpItem.list = listUpdateEdit;
+//       todoUpItem.item = {};
+//       return { ...state, todoList: todoUpItem }
+//     case 'delete-item':
+//       const todoUpDelete = state.todoList;
+//       const listUpdate = todoUpDelete.list.filter((item) => {
+//         return item.id_todolist !== action.id_todolist;
+//       });
+//       todoUpDelete.list = listUpdate;
+//       return { ...state, todoList: todoUpDelete }
+//     case 'update-list':
+//       const todoUpList = state.todoList;
+//       todoUpList.list = action.list;
+//       return { ...state, todoList: todoUpList }
+//     case 'edit-item':
+//       const todoUpEdit = state.todoList;
+//       todoUpEdit.item = action.item;
+//       return { ...state, todoList: todoUpEdit }
+//     case 'add-item':
+//       const todoUp = state.todoList.list;
+//       todoUp.push(action.item);
+//       return { ...state, todoList: {list: todoUp, item: {}} }
+//     default:
+//       return state;
+//   }
+// }
+
+
+//----------------------------------------------------------------------------------
+
 
 function App() {
   return <StoreProvider>

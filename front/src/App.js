@@ -1,5 +1,6 @@
   
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import consumer from './components/todo/consumer';
 import Store, { StoreProvider } from './store';
 
 const HOST_API = "http://localhost:8080/api";
@@ -20,13 +21,7 @@ const Form = () => {
     };
 
 
-    fetch(HOST_API + "/todo", {
-      method: "POST",
-      body: JSON.stringify(request),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    consumer.save(request)
       .then(response => response.json())
       .then((todo) => {
         dispatch({ type: "add-item", item: todo });
@@ -44,13 +39,7 @@ const Form = () => {
       completed_todo: item.completed_todo
     };
     
-    fetch(HOST_API + "/" + request.id_todo + "/todo", {
-      method: "PUT",
-      body: JSON.stringify(request),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    consumer.update(request)
       .then(response => response.json())
       .then((todo) => {
         dispatch({ type: "update-item", item: todo });
@@ -75,13 +64,16 @@ const Form = () => {
 
 
 const List = () => {
+
   const { dispatch, state: { todo } } = useContext(Store);
   const currentList = todo.list;
+
   useEffect(() => {
-    fetch(HOST_API + "/todos")
-      .then(response => response.json())
-      .then((list) => {
-        dispatch({ type: "update-list", list })
+    consumer.List().then((response) => {
+      response.json().then((list) => {
+        dispatch({ type: "update-list", list });
+      
+    });
       })
   }, [dispatch]);
 

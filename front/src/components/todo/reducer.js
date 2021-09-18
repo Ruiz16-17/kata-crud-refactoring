@@ -1,5 +1,4 @@
-export default (state, action) => {
-
+export default (state,action) => {
     switch (action.type) {
         case 'update-item':
             const todoUpItem = state.todo;
@@ -34,4 +33,5 @@ export default (state, action) => {
         default:
             return state;
     }
+
 }

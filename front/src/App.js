@@ -79,9 +79,8 @@ const List = () => {
 
 
   const onDelete = (id_todo) => {
-    fetch(HOST_API + "/" + id_todo + "/todo", {
-      method: "DELETE"
-    }).then((list) => {
+    
+    consumer.delete(id_todo).then((list) => {
       dispatch({ type: "delete-item", id_todo })
     })
   };

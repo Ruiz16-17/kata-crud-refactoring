@@ -27,6 +27,13 @@ export default {
                 'Content-Type': 'application/json'
             }
         })
+    },
+
+    delete: async (id) => {
+
+        return fetch(HOST_API + "/" + id + "/todo", {
+            method: "DELETE"
+        })
     }
 
 }

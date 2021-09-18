@@ -4,7 +4,7 @@ export default (state, action) => {
         case 'update-item':
             const todoListUpItem = state.todoList;
             const listUpdateEdit = todoListUpItem.list.map((item) => {
-                if (item.id_todoList === action.item.id_todoList) {
+                if (item.id_todolist === action.item.id_todolist) {
                     return action.item;
                 }
                 return item;
@@ -14,11 +14,15 @@ export default (state, action) => {
             return { ...state, todoList: todoListUpItem }
         case 'delete-item':
             const todoListUpDelete = state.todoList;
+            
             const listUpdate = todoListUpDelete.list.filter((item) => {
-                return item.id_todoList !== action.id_todoList;
+
+                return item.id_todolist !== action.id_todolist;
             });
+            
             todoListUpDelete.list = listUpdate;
             return { ...state, todoList: todoListUpDelete }
+            
         case 'update-list':
             const todoListUpList = state.todoList;
             todoListUpList.list = action.list;

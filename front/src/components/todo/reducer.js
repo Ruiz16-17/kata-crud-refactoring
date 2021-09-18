@@ -16,6 +16,7 @@ export default (state,action) => {
             const listUpdate = todoUpDelete.list.filter((item) => {
                 return item.id_todo !== action.id_todo;
             });
+            
             todoUpDelete.list = listUpdate;
             return { ...state, todo: todoUpDelete }
         case 'update-list':

@@ -16,9 +16,9 @@ export default () => {
     }, [dispatch]);
 
 
-    const onDelete = (id_todoList) => {
-        consumer.delete(id_todoList).then((list) => {
-            dispatch({ type: "delete-item", id_todoList })
+    const onDelete = (id_todolist) => {
+        consumer.delete(id_todolist).then((list) => {
+            dispatch({ type: "delete-item", id_todolist })
         })
     };
 
